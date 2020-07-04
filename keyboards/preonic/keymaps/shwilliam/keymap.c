@@ -90,7 +90,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
         case MAIL:
         if (record->event.pressed) {
-            SEND_STRING("w-lindvall@outlook.com");
+            SEND_STRING("shwilliam@hey.com");
         }
         return false;
         case GITHUB:
