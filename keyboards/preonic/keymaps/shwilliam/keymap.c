@@ -235,7 +235,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     /* lower
     * ,-----------------------------------------------------------------------------------.
-    * |  ♡   |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |  F7  |  F8  |  F9  | F10  |      |
+    * |  ♡   |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |  F7  |  F8  |  F9  | F10  | Reset|
     * |------+------+------+------+------+------+------+------+------+------+------+------|
     * |  ‣   | CLeft| MUp  |CRight|MWDown| 【   |  -   |  _   |  |   |  =   |  +   | DLeft|
     * |------+------+------+------+------+-------------+------+------+------+------+------|
@@ -248,7 +248,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     */
 
     [2] = LAYOUT_preonic_grid(
-        HEART   ,KC_F1   ,KC_F2   ,KC_F3   ,KC_F4   ,KC_F5   ,KC_F6   ,KC_F7   ,KC_F8   ,KC_F9   ,KC_F10  ,KC_NO,
+        HEART   ,KC_F1   ,KC_F2   ,KC_F3   ,KC_F4   ,KC_F5   ,KC_F6   ,KC_F7   ,KC_F8   ,KC_F9   ,KC_F10  ,RESET,
         TBULLET ,KC_BTN1 ,KC_MS_U ,KC_BTN2 ,KC_WH_D ,LTITLE  ,KC_MINS ,KC_UNDS ,KC_PIPE ,KC_EQL  ,KC_PLUS ,LGUI(KC_BSPC),
         KC_NO   ,KC_MS_L ,KC_MS_D ,KC_MS_R ,KC_WH_U ,RTITLE  ,KC_LEFT ,KC_DOWN ,KC_UP   ,KC_RGHT ,KC_LPRN ,KC_RPRN,
         KC_NO   ,LIQUOT  ,RIQUOT  ,LQUOT   ,RQUOT   ,FBULLET ,KC_NO   ,KC_LCBR ,KC_RCBR ,KC_LBRC ,KC_RBRC ,FN_ARROW,
