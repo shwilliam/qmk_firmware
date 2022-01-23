@@ -84,7 +84,6 @@ oled_rotation_t oled_init_user(oled_rotation_t rotation) {
 #define L_ADJUST 8
 
 void oled_render_layer_state(void) {
-    oled_write_P(PSTR("Layer: "), false);
     switch (layer_state) {
         case L_BASE:
             oled_write_ln_P(PSTR("BASE"), false);
@@ -116,17 +115,15 @@ const char code_to_name[60] = {
     '#', ';', '\'', '`', ',', '.', '/', ' ', ' ', ' '};
 
 void set_keylog(uint16_t keycode, keyrecord_t *record) {
-  char name = ' ';
-    if ((keycode >= QK_MOD_TAP && keycode <= QK_MOD_TAP_MAX) ||
-        (keycode >= QK_LAYER_TAP && keycode <= QK_LAYER_TAP_MAX)) { keycode = keycode & 0xFF; }
-  if (keycode < 60) {
-    name = code_to_name[keycode];
-  }
+//   char name = ' ';
+//     if ((keycode >= QK_MOD_TAP && keycode <= QK_MOD_TAP_MAX) ||
+//         (keycode >= QK_LAYER_TAP && keycode <= QK_LAYER_TAP_MAX)) { keycode = keycode & 0xFF; }
+//   if (keycode < 60) {
+//     name = code_to_name[keycode];
+//   }
 
   // update keylog
-  snprintf(keylog_str, sizeof(keylog_str), "%dx%d, k%2d : %c",
-           record->event.key.row, record->event.key.col,
-           keycode, name);
+  snprintf(keylog_str, sizeof(keylog_str), "%d", keycode);
 }
 
 void oled_render_keylog(void) {
