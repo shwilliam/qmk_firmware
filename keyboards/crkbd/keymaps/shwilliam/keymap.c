@@ -26,7 +26,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_ESC,     KC_A,    KC_S,    KC_D,    KC_F,    KC_G,                         KC_H,    KC_J,    KC_K,    KC_L, KC_QUOT,  KC_ENT,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      KC_LALT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_SCLN,
+      KC_LEAD,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH, KC_SCLN,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           KC_LGUI, KC_LSFT, KC_LCTL,   MO(2), LT(1, KC_SPC), MO(3)
                                       //`--------------------------'  `--------------------------'
@@ -69,6 +69,33 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                       //`--------------------------'  `--------------------------'
   ),
 };
+
+LEADER_EXTERNS();
+void matrix_scan_user(void) {
+  LEADER_DICTIONARY() {
+    leading = false;
+    leader_end();
+
+    SEQ_ONE_KEY(KC_SPC) {
+      register_code(KC_LGUI);
+      register_code(KC_SPC);
+      unregister_code(KC_SPC);
+      unregister_code(KC_LGUI);
+    }
+    SEQ_ONE_KEY(KC_C) {
+      register_code(KC_LGUI);
+      register_code(KC_C);
+      unregister_code(KC_C);
+      unregister_code(KC_LGUI);
+    }
+    SEQ_ONE_KEY(KC_V) {
+      register_code(KC_LGUI);
+      register_code(KC_V);
+      unregister_code(KC_V);
+      unregister_code(KC_LGUI);
+    }
+  }
+}
 
 #ifdef OLED_ENABLE
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
