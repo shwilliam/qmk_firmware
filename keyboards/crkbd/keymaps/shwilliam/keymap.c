@@ -125,37 +125,13 @@ void matrix_scan_user(void) {
 
 #ifdef OLED_ENABLE
 oled_rotation_t oled_init_user(oled_rotation_t rotation) {
-  if (!is_keyboard_master()) {
-    return OLED_ROTATION_180;  // flips the display 180 degrees if offhand
-  }
-  return rotation;
+  return OLED_ROTATION_180;
 }
 
 #define L_BASE 0
 #define L_LOWER 2
 #define L_RAISE 4
 #define L_ADJUST 8
-
-void oled_render_layer_state(void) {
-    switch (layer_state) {
-        case L_BASE:
-            oled_write_ln_P(PSTR("BASE"), false);
-            break;
-        case L_LOWER:
-            oled_write_ln_P(PSTR("SYMBOLS"), false);
-            break;
-        case L_RAISE:
-            oled_write_ln_P(PSTR("NUMBERS"), false);
-            break;
-        case L_ADJUST:
-        case L_ADJUST|L_LOWER:
-        case L_ADJUST|L_RAISE:
-        case L_ADJUST|L_LOWER|L_RAISE:
-            oled_write_ln_P(PSTR("SYSTEM"), false);
-            break;
-    }
-}
-
 
 char keylog_str[24] = {};
 
@@ -166,22 +142,6 @@ const char code_to_name[60] = {
     '1', '2', '3', '4', '5', '6', '7', '8', '9', '0',
     'R', 'E', 'B', 'T', '_', '-', '=', '[', ']', '\\',
     '#', ';', '\'', '`', ',', '.', '/', ' ', ' ', ' '};
-
-void set_keylog(uint16_t keycode, keyrecord_t *record) {
-//   char name = ' ';
-//     if ((keycode >= QK_MOD_TAP && keycode <= QK_MOD_TAP_MAX) ||
-//         (keycode >= QK_LAYER_TAP && keycode <= QK_LAYER_TAP_MAX)) { keycode = keycode & 0xFF; }
-//   if (keycode < 60) {
-//     name = code_to_name[keycode];
-//   }
-
-  // update keylog
-  snprintf(keylog_str, sizeof(keylog_str), "%d", keycode);
-}
-
-void oled_render_keylog(void) {
-    oled_write(keylog_str, false);
-}
 
 void render_bootmagic_status(bool status) {
     // show ctrl-gui swap options
@@ -198,15 +158,15 @@ void render_bootmagic_status(bool status) {
     }
 }
 
-// static void oled_render_bird(void) {
-//     static const char PROGMEM bird_and_corne[] = {
-//         0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,128,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-//         0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  5, 23, 63, 63,127,254,252,240,252,254,255,255,255,119,126, 60, 32,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,240,248,252, 30, 14, 14, 14, 14, 14, 14, 30, 60, 56, 48,  0,  0,240,248,252, 30, 14, 14, 14, 14, 14, 14, 30,252,248,240,  0,  0,254,254,252, 28, 14, 14, 14, 14,  0,  0,254,254,252, 28, 14, 14, 14, 14, 30,252,248,240,  0,  0,240,248,252,222,206,206,206,206,206,206,222,252,248,240,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 
-//         0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1, 11, 15, 63, 31, 15,  7,  7,  7,  7,  7,  7, 31, 63, 31,127, 62,120, 80, 16,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 15, 31, 63,120,112,112,112,112,112,112,120, 60, 28, 12,  0,  0, 15, 31, 63,120,112,112,112,112,112,112,120, 63, 31, 15,  0,  0,127,127,127,  0,  0,  0,  0,  0,  0,  0,127,127,127,  0,  0,  0,  0,  0,  0,127,127,127,  0,  0, 15, 31, 63,121,113,113,113,113,113,113,121, 61, 29, 13,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 
-//         0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
-//     };
-//     oled_write_raw_P(bird_and_corne, sizeof(bird_and_corne));
-// }
+static void oled_render_bird(void) {
+    static const char PROGMEM bird_and_corne[] = {
+        0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,128,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+        0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  5, 23, 63, 63,127,254,252,240,252,254,255,255,255,119,126, 60, 32,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,240,248,252, 30, 14, 14, 14, 14, 14, 14, 30, 60, 56, 48,  0,  0,240,248,252, 30, 14, 14, 14, 14, 14, 14, 30,252,248,240,  0,  0,254,254,252, 28, 14, 14, 14, 14,  0,  0,254,254,252, 28, 14, 14, 14, 14, 30,252,248,240,  0,  0,240,248,252,222,206,206,206,206,206,206,222,252,248,240,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 
+        0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  1, 11, 15, 63, 31, 15,  7,  7,  7,  7,  7,  7, 31, 63, 31,127, 62,120, 80, 16,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 15, 31, 63,120,112,112,112,112,112,112,120, 60, 28, 12,  0,  0, 15, 31, 63,120,112,112,112,112,112,112,120, 63, 31, 15,  0,  0,127,127,127,  0,  0,  0,  0,  0,  0,  0,127,127,127,  0,  0,  0,  0,  0,  0,127,127,127,  0,  0, 15, 31, 63,121,113,113,113,113,113,113,121, 61, 29, 13,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0, 
+        0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
+    };
+    oled_write_raw_P(bird_and_corne, sizeof(bird_and_corne));
+}
 
 static void oled_render_branch(void) {
     static const char PROGMEM branch[] = {
@@ -220,19 +180,14 @@ static void oled_render_branch(void) {
 
 bool oled_task_user(void) {
     if (is_keyboard_master()) {
-        oled_render_layer_state();
-        oled_render_keylog();
-    } else {
         oled_render_branch();
+    } else {
+        oled_render_bird();
     }
     return false;
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-    if (record->event.pressed) {
-        set_keylog(keycode, record);
-    }
-
     switch (keycode) {
         case FN_ARROW:
             if (record->event.pressed) {
