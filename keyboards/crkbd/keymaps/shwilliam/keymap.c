@@ -20,6 +20,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include QMK_KEYBOARD_H
 #include <stdio.h>
 
+enum custom_keycodes {
+    FN_ARROW = SAFE_RANGE,
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
@@ -38,7 +42,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
        KC_TAB,   KC_AT, XXXXXXX, KC_EXLM, XXXXXXX, KC_HASH,                      KC_MINS, KC_UNDS, KC_PIPE,  KC_EQL, KC_PLUS, KC_BSPC,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-       KC_ESC, KC_AMPR, KC_TILD, XXXXXXX,  KC_DLR,  KC_GRV,                      XXXXXXX, KC_LPRN, KC_LCBR, KC_RCBR, KC_RPRN,  KC_ENT,
+       KC_ESC, KC_AMPR, KC_TILD, XXXXXXX,  KC_DLR,  KC_GRV,                      XXXXXXX, KC_LPRN, KC_LCBR, KC_RCBR, KC_RPRN,FN_ARROW,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       KC_LALT, XXXXXXX, KC_PERC, XXXXXXX, KC_CIRC, XXXXXXX,                      KC_ASTR, KC_LBRC, KC_RBRC, XXXXXXX, KC_BSLS, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
@@ -82,6 +86,27 @@ void matrix_scan_user(void) {
       register_code(KC_SPC);
       unregister_code(KC_SPC);
       unregister_code(KC_LGUI);
+    }
+    SEQ_ONE_KEY(KC_H) {
+      SEND_STRING(SS_LALT("2661"));
+    }
+    SEQ_ONE_KEY(KC_M) {
+     SEND_STRING(SS_LALT("3010"));
+    }
+    SEQ_ONE_KEY(KC_COMM) {
+      SEND_STRING(SS_LALT("3011"));
+    }
+    SEQ_ONE_KEY(KC_J) {
+      SEND_STRING(SS_LALT("300c"));
+    }
+    SEQ_ONE_KEY(KC_QUOT) {
+      SEND_STRING(SS_LALT("300d"));
+    }
+    SEQ_ONE_KEY(KC_K) {
+      SEND_STRING(SS_LALT("300a"));
+    }
+    SEQ_ONE_KEY(KC_L) {
+      SEND_STRING(SS_LALT("300b"));
     }
     SEQ_ONE_KEY(KC_C) {
       register_code(KC_LGUI);
@@ -204,9 +229,18 @@ bool oled_task_user(void) {
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  if (record->event.pressed) {
-    set_keylog(keycode, record);
-  }
-  return true;
+    if (record->event.pressed) {
+        set_keylog(keycode, record);
+    }
+
+    switch (keycode) {
+        case FN_ARROW:
+            if (record->event.pressed) {
+                SEND_STRING("=>");
+            }
+            return false;
+    }
+
+    return true;
 }
 #endif
